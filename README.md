@@ -36,3 +36,18 @@ To start with Docker, verify you have it installed, then:
 ```bash
 docker-compose up --build
 ```
+
+#### Note on Docker usage:
+
+The Docker image is the officially recommended build configuration preconfigured with npm. If you prefer to use yarn,
+do the following within `Dockerfile`:
+
+```Dockerfile
+# If using yarn with a `yarn.lock` comment out below
+# COPY package.json yarn.lock ./
+# RUN yarn install --frozen-lockfile
+
+# If using npm with a `package-lock.json` comment out above and use below instead
+COPY package.json package-lock.json ./
+RUN npm ci
+```
