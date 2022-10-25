@@ -1,10 +1,10 @@
 import { Menu, Transition } from '@headlessui/react';
-import { Fragment, VFC } from 'react';
+import { FC, Fragment, VFC } from 'react';
 import { user, userNavigation } from './navigation.constants';
 import Image from 'next/image';
 import { classNames } from '@/lib/utilities/class-names';
 
-const ProfileImage: VFC = () => (
+const ProfileImage: FC = () => (
   <Menu as="div" className="relative ml-3">
     <div>
       <Menu.Button className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">

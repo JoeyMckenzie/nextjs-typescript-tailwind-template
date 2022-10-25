@@ -1,11 +1,11 @@
 import { Disclosure } from '@headlessui/react';
-import { BellIcon } from '@heroicons/react/outline';
-import { VFC } from 'react';
+import { BellIcon } from '@heroicons/react/24/outline';
+import { FC } from 'react';
 import { navigation, user, userNavigation } from './navigation.constants';
 import { classNames } from '@/lib/utilities/class-names';
 import Image from 'next/image';
 
-const MobileMenu: VFC = () => (
+const MobileMenu: FC = () => (
   <Disclosure.Panel className="md:hidden">
     <div className="space-y-1 px-2 pt-2 pb-3 sm:px-3">
       {navigation.map((item) => (

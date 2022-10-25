@@ -1,8 +1,8 @@
-import { VFC } from 'react';
+import { FC } from 'react';
 import { NavigationItem } from 'lib/types/navigation.types';
 import { classNames } from '@/lib/utilities/class-names';
 
-const NavbarItem: VFC<NavigationItem> = ({ name, href, current }) => (
+const NavbarItem: FC<NavigationItem> = ({ name, href, current }) => (
   <a
     href={href}
     className={classNames(

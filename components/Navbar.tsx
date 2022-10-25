@@ -1,15 +1,31 @@
 import { Disclosure } from '@headlessui/react';
-import { BellIcon } from '@heroicons/react/outline';
-import { VFC } from 'react';
+import { BellIcon } from '@heroicons/react/24/outline';
+import { FC, useCallback, useEffect, useState } from 'react';
 import NavbarItem from './NavbarItem';
 import ProfileImage from './ProfileImage';
 import NavbarToggleButton from './NavbarToggleButton';
 import { navigation } from './navigation.constants';
-import { useDarkMode } from '@/lib/hooks/use-dark-mode.hook';
 import Image from 'next/image';
+import { useTheme } from 'next-themes';
 
-const Navbar: VFC = () => {
-  const { enabled, toggleDarkMode } = useDarkMode();
+const Navbar: FC = () => {
+  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme } = useTheme();
+
+  const enabled = theme === 'dark';
+
+  const toggleDarkMode = useCallback(() => {
+    const themeToSet = enabled ? 'light' : 'dark';
+    setTheme(themeToSet);
+  }, [enabled, setTheme]);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <Disclosure as="nav" className="bg-gray-100 dark:bg-gray-800">

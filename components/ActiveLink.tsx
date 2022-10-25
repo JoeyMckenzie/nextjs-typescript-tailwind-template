@@ -1,37 +1,63 @@
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
-import Link from 'next/link';
-import { FC } from 'react';
-import { classNames } from '@/lib/utilities/class-names';
+import Link, { LinkProps } from 'next/link';
+import React, { useState, useEffect, ReactElement, Children } from 'react';
 
-interface ActiveLinkProps {
-  className: string;
+type ActiveLinkProps = LinkProps & {
+  children: ReactElement;
   activeClassName: string;
-  defaultClassName: string;
-  href: string;
-}
-
-const ActiveLink: FC<ActiveLinkProps> = ({
-  children,
-  className,
-  activeClassName,
-  defaultClassName,
-  href,
-}) => {
-  const { pathname } = useRouter();
-
-  const activeClass = (href: string) =>
-    pathname === href ? activeClassName : defaultClassName;
-
-  return (
-    <Link href={href} passHref>
-      <a className={classNames(activeClass(href), className)}>{children}</a>
-    </Link>
-  );
 };
 
-ActiveLink.propTypes = {
-  activeClassName: PropTypes.string.isRequired,
+const ActiveLink = ({
+  children,
+  activeClassName,
+  ...props
+}: ActiveLinkProps) => {
+  const { asPath, isReady } = useRouter();
+
+  const child = Children.only(children);
+  const childClassName = child.props.className || '';
+  const [className, setClassName] = useState(childClassName);
+
+  useEffect(() => {
+    // Check if the router fields are updated client-side
+    if (isReady) {
+      // Dynamic route will be matched via props.as
+      // Static route will be matched via props.href
+      const linkPathname = new URL(
+        (props.as || props.href) as string,
+        location.href
+      ).pathname;
+
+      // Using URL().pathname to get rid of query and hash
+      const activePathname = new URL(asPath, location.href).pathname;
+
+      const newClassName =
+        linkPathname === activePathname
+          ? `${childClassName} ${activeClassName}`.trim()
+          : childClassName;
+
+      if (newClassName !== className) {
+        setClassName(newClassName);
+      }
+    }
+  }, [
+    asPath,
+    isReady,
+    props.as,
+    props.href,
+    childClassName,
+    activeClassName,
+    setClassName,
+    className,
+  ]);
+
+  return (
+    <Link {...props}>
+      {React.cloneElement(child, {
+        className: className || null,
+      })}
+    </Link>
+  );
 };
 
 export default ActiveLink;

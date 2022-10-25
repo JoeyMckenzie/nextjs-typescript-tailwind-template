@@ -1,7 +1,9 @@
 import { FC } from 'react';
 import Navbar from '@/components/Navbar';
 
-const MainLayout: FC = ({ children }) => (
+const MainLayout: FC<{
+  children: React.ReactNode;
+}> = ({ children }) => (
   <>
     <Navbar />
 
